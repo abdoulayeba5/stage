@@ -126,6 +126,10 @@ $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
     /* .bla a{
       margin-left: 50%;
     } */
+    p{
+      font-size: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
     </style>
 </head>
 <body>
@@ -249,7 +253,9 @@ $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
           }else{
             ?>
             <a href="administrateur" class="btn btn-primary" style="margin-left: 50%;"> << GO BACK </a>
+            
             <?php 
+
           }
           ?>
           </div>
@@ -299,7 +305,7 @@ $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
                           }
             
                           $offset = ($page - 1) * $limit;
-            
+                            
             
                             $query = "SELECT * from brut LIMIT $offset, $limit";
                             $query2 = "SELECT COUNT(*) from brut";
@@ -389,6 +395,7 @@ $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
                     $total_rows = mysqli_fetch_array($query_run)[0];
                     $total_page = ceil($total_rows / $limit);
                 ?>
+                <p><b> all data :<?php echo $total_rows ?> </b></p>
             
                   <nav aria-label="...">
                   <ul class="pagination">
@@ -445,7 +452,8 @@ $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
                     $total_rows = mysqli_fetch_array($query_run)[0];
                     $total_pagef = ceil($total_rows / $limit);
                 ?>
-            
+                <p><b> all data :<?php echo $total_rows ?> </b></p>
+                
                   <nav aria-label="...">
                   <ul class="pagination">
                     <li class="page-item ">
@@ -488,9 +496,12 @@ $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
                     </select>
                     
                 </form>
+
+                
                 <?php
               }
               ?>
+              
               
                   </div>
                 </div>

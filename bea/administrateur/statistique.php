@@ -3,7 +3,7 @@
 include '../conn.php';
 session_start();
 $_SESSION['current_url'] = $_SERVER['REQUEST_URI'];
-$qury_classe = "SELECT COUNT(`classe`) AS classe FROM `brut` GROUP BY classe ORDER BY classe DESC";
+$qury_classe = "SELECT COUNT(`classe`) AS classe FROM `brut` GROUP BY classe ";
 $result=mysqli_query($conn, $qury_classe);
 $classe = array();
 $classes = array();
@@ -13,10 +13,10 @@ if ($result) {
     array_push($classe, $row["classe"]);
     
   }
-  array_push($classes,(round(($classe[0]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2))); 
-  array_push($classes,(round(($classe[1]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)));
+  array_push($classes,(round(($classe[3]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2))); 
   array_push($classes,(round(($classe[2]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)));
-  array_push($classes,(round(($classe[3]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)));
+  array_push($classes,(round(($classe[1]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)));
+  array_push($classes,(round(($classe[0]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)));
 
   $json = json_encode($classes);
 }
@@ -4464,7 +4464,7 @@ if ($result) {
               </td>
               
                     <td>
-                      <p><i class="fa fa-square aero"></i>D </p>
+                      <p><i class="fa fa-square aero"></i>A </p>
                     </td>
                     <td ><?=round(($classe[0]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)?>%</td>
                     <td><?=$classe[0]?></td>
@@ -4472,7 +4472,7 @@ if ($result) {
                   <tr>
                     
                     <td>
-                      <p><i class="fa fa-square purple"></i>C </p>
+                      <p><i class="fa fa-square purple"></i>B </p>
                     </td>
                     <td ><?=round(($classe[1]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)?>%</td>
                     <td><?=$classe[1]?></td>
@@ -4480,14 +4480,14 @@ if ($result) {
                   <tr>
                  
                     <td>
-                      <p><i class="fa fa-square red"></i>B</p>
+                      <p><i class="fa fa-square red"></i>C </p>
                     </td>
                     <td ><?=round(($classe[2]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)?>%</td>
                     <td><?=$classe[2]?></td>
                   </tr>
                   <tr>
                     <td>
-                      <p><i class="fa fa-square green"></i>A </p>
+                      <p><i class="fa fa-square green"></i>D </p>
                     </td>
                     <td >
                     <?=round(($classe[3]*100)/($classe[0]+$classe[3]+$classe[1]+$classe[2]),2)?>%</td>
@@ -4571,18 +4571,19 @@ if ($result) {
               datasets: [{
     data: [obj[0], obj[1], obj[2], obj[3]],
     backgroundColor: [
-        "#dddddd",
-        "#b700ff",
-        "#ff1900",
         "#00ffc8",
-        "#3498DB"
+        "#ff1900",
+        "#b700ff",
+        "#dddddd",
+        "#ff1900"
+    
     ],
     hoverBackgroundColor: [
-        "#dddddd",
-        "#b700ff",
-        "#ff1900",
         "#00ffc8",
-        "#49A9EA"
+        "#ff1900",
+        "#b700ff",
+        "#dddddd",
+        "#ff1900"
     ]
     
 }]
