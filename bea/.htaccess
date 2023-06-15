@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# disable direct access to php files
+RewriteCond %{THE_REQUEST} \.php[\ /?].*HTTP/ [NC]
+RewriteRule ^(.*)$ 404.php [L]
+
+# redirect to check_url.php if file not found
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ check_url.php [L]

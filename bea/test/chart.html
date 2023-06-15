@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .chart-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+    }
+    
+    .percentage {
+      position: absolute;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+    }
+    
+    .legend {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+    }
+    
+    .legend-item span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 5px;
+    }
+    
+    .legend-item-label {
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="chart-container">
+    <canvas id="myChart"></canvas>
+    fo
+  </div>
+  <script>
+    // create data for the chart
+var data = {
+  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  datasets: [{
+    label: 'My First Dataset',
+    data: [12, 19, 3, 5, 2, 3],
+    backgroundColor: [
+      'rgba(255, 99, 132, 0.8)',
+      'rgba(54, 162, 235, 0.8)',
+      'rgba(255, 206, 86, 0.8)',
+      'rgba(75, 192, 192, 0.8)',
+      'rgba(153, 102, 255, 0.8)',
+      'rgba(255, 159, 64, 0.8)'
+    ],
+    borderColor: [
+      'rgba(255, 99, 132, 1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)'
+    ],
+    borderWidth: 1
+  }]
+};
+
+// configure options for the chart
+var options = {
+  plugins: {
+    doughnutlabel: {
+      labels: [{
+        text: 'Total: 44',
+        font: {
+          size: '16'
+        },
+        color: '#000'
+      }]
+    }
+  },
+  tooltips: {
+    enabled: false
+  },
+  legend: {
+    display: false
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+  cutout: '70%',
+  animation: {
+    animateRotate: true,
+    animateScale: false
+  }
+};
+
+// create the chart
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'doughnut',
+  data: data,
+  options: options
+});
+
+// get the chart segments
+var doughnutSegments = myChart.getDatasetMeta(0).data;
+
+// calculate the total value of all segments
+var total = 0;
+for (var i = 0; i < doughnutSegments.length; i++) {
+  total += doughnutSegments[i]._model.circumference;
+}
+
+// add percentage labels to each segment
+for (var i = 0; i < doughnutSegments.length; i++) {
+  var segment = doughnutSegments[i]._model;
+  var percent = Math.round((segment.circumference / total) * 100);
+  var label = '<div class="percentage">' + percent + '%</div>';
+  var tooltip = '<div class="tooltip">' + data.labels[i] + ': ' + data.datasets[0].data[i] + '</div>';
+  var content = label + tooltip;
+  var tooltipWrapper = '<div class="tooltip-wrapper">' + content + '</div>';
+  segment.outerRadius -= 10;
+  segment.innerRadius += 10;
+  segment.endAngle -= 0.05;
+  var x = (segment.outerRadius + segment.innerRadius) / 2 * Math.cos((segment.startAngle + segment.endAngle - Math.PI) / 2) + segment.x;
+  var y = (segment.outerRadius + segment.innerRadius) / 2 * Math.sin((segment.startAngle + segment.endAngle - Math.PI) / 2) + segment.y;
+  var tooltipX = segment.outerRadius * Math.cos((segment.startAngle + segment.endAngle - Math.PI) / 2) + segment.x;
+  var tooltipY = segment.outerRadius * Math.sin((segment.startAngle + segment.endAngle - Math.PI) / 2) + segment.y;
+  var tooltipOffsetX = tooltipX - x;
+  var tooltipOffsetY = tooltipY - y;
+  if (x > segment.x) {
+  tooltipOffsetX += 5;
+  } else {
+  tooltipOffsetX -= 5;
+  }
+  if (y > segment.y) {
+  tooltipOffsetY += 5;
+  } else {
+  tooltipOffsetY -= 5;
+  }
+  var tooltipStyle = 'transform: translate(' + tooltipOffsetX + 'px, ' + tooltipOffsetY + 'px);';
+  var tooltipWrapperStyle = 'transform: translate(' + x + 'px, ' + y + 'px);';
+  tooltipWrapper = '<div class="tooltip-wrapper" style="' + tooltipWrapperStyle + '">' + content + '</div>';
+  document.querySelector('.chart-container').insertAdjacentHTML('beforeend', tooltipWrapper);
+  }
+  
+  // add legend items
+  var legendItems = '';
+  for (var i = 0; i < data.labels.length; i++) {
+  var color = data.datasets[0].backgroundColor[i];
+  var label = data.labels[i];
+  legendItems += '<div class="legend-item"><span style="background-color: ' + color + '"></span><span class="legend-item-label">' + label + '</span></div>';
+  }
+  var legend = '<div class="legend">' + legendItems + '</div>';
+  document.querySelector('.chart-container').insertAdjacentHTML('beforeend', legend);
+
+  </script>
+</body>
+</html>

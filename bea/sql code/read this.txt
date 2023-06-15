@@ -1,0 +1,3 @@
+databases name is BEA
+
+create database BEA
